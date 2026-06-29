@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shady — Systems that kill busywork</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;430;450;480;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&display=swap" rel="stylesheet">
+<style>
+  /* Steep — daylight editorial SaaS (Refero) */
+  :root{
+    --ink:#17191c;--ash:#4c4c4c;--graphite:#777b86;--dove:#a3a6af;
+    --fog:#f7f7f8;--white:#fff;--rust:#5d2a1a;--apricot:#fbe1d1;--sky:#d3e3fc;
+    --serif:'Source Serif 4',Georgia,serif;
+    --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    --shadow:rgba(4,23,43,.05) 0 0 0 1px,rgba(0,0,0,.08) 0 20px 25px -5px,rgba(0,0,0,.07) 0 8px 10px -6px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--sans);background:var(--fog);color:var(--ink);line-height:1.45;
+    -webkit-font-smoothing:antialiased;letter-spacing:-.009em;padding:0 0 72px}
+  .wrap{max-width:640px;margin:0 auto;padding:0 20px}
+
+  /* hero */
+  header{position:relative;text-align:center;padding:56px 0 8px}
+  .glow{position:absolute;top:0;left:50%;transform:translateX(-50%);width:440px;height:260px;
+    background:radial-gradient(closest-side,var(--apricot) 0%,rgba(251,225,209,0) 72%);opacity:.6;
+    pointer-events:none;z-index:0}
+  .kicker{position:relative;z-index:1;font-size:13px;font-weight:500;color:var(--graphite);
+    text-transform:uppercase;letter-spacing:.06em}
+  h1{position:relative;z-index:1;font-family:var(--serif);font-weight:400;font-size:46px;line-height:1.08;
+    letter-spacing:-.018em;margin:16px auto 0;max-width:14ch}
+  .sub{position:relative;z-index:1;color:var(--ash);font-size:17px;font-weight:400;margin:18px auto 0;
+    max-width:42ch;line-height:1.5}
+  .cta-row{position:relative;z-index:1;margin-top:26px;display:flex;gap:8px;justify-content:center;align-items:center}
+  .btn{display:inline-block;background:var(--ink);color:#fff;font-weight:450;font-size:15px;
+    padding:12px 24px;border-radius:9999px;text-decoration:none;transition:.15s;letter-spacing:-.009em}
+  .btn:hover{background:#000}
+  .link{color:var(--ink);font-weight:480;font-size:15px;text-decoration:none;padding:12px 8px}
+  .link:hover{text-decoration:underline}
+
+  /* projects */
+  .section-lbl{font-size:13px;font-weight:500;color:var(--graphite);text-transform:uppercase;
+    letter-spacing:.05em;margin:48px 0 16px;text-align:center}
+  .card{background:var(--white);border-radius:24px;box-shadow:var(--shadow);padding:26px;margin-top:18px}
+  .card .pill{display:inline-block;font-size:12px;font-weight:500;padding:4px 13px;border-radius:9999px;
+    letter-spacing:.02em;margin-bottom:14px}
+  .pill.warm{background:var(--apricot);color:var(--rust)}
+  .pill.cool{background:var(--sky);color:#27496b}
+  .pill.neutral{background:var(--fog);color:var(--graphite)}
+  .card h2{font-family:var(--serif);font-weight:400;font-size:25px;line-height:1.18;letter-spacing:-.012em}
+  .card .pain{color:var(--ash);font-size:15.5px;margin-top:10px;line-height:1.5}
+  .card .does{color:var(--graphite);font-size:14px;margin-top:12px;line-height:1.55}
+  .card .does b{color:var(--ink);font-weight:480}
+  .card a.view{display:inline-flex;align-items:center;gap:6px;margin-top:18px;background:var(--ink);
+    color:#fff;font-weight:450;font-size:14.5px;padding:11px 20px;border-radius:9999px;text-decoration:none;transition:.15s}
+  .card a.view:hover{background:#000}
+
+  /* services */
+  .svc{background:var(--white);border-radius:24px;box-shadow:var(--shadow);padding:26px;margin-top:40px}
+  .svc h3{font-family:var(--serif);font-weight:400;font-size:22px;margin-bottom:16px}
+  .srow{display:flex;gap:13px;padding:13px 0;align-items:flex-start}
+  .srow+.srow{border-top:1px solid #ececee}
+  .srow .ic{flex:0 0 30px;height:30px;border-radius:9999px;background:var(--apricot);color:var(--rust);
+    display:grid;place-items:center;font-size:14px;margin-top:1px}
+  .srow .st{font-weight:480;font-size:15.5px}
+  .srow .sd{color:var(--graphite);font-size:14px;margin-top:2px;line-height:1.5}
+
+  /* contact */
+  .contact{text-align:center;margin-top:44px;padding:34px 24px;background:var(--ink);border-radius:24px;color:#fff}
+  .contact h3{font-family:var(--serif);font-weight:400;font-size:26px;letter-spacing:-.012em}
+  .contact p{color:#c9c9cf;font-size:15px;margin-top:9px}
+  .contact .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+  .contact a{display:inline-block;text-decoration:none;font-weight:450;font-size:14.5px;padding:11px 22px;border-radius:9999px}
+  .contact a.wa{background:#fff;color:var(--ink)}
+  .contact a.em{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25)}
+  .contact a:hover{opacity:.9}
+  .foot{text-align:center;color:var(--dove);font-size:12.5px;margin-top:26px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="glow"></div>
+    <div class="kicker">Shady · Software & automation</div>
+    <h1>I build systems that kill busywork.</h1>
+    <p class="sub">Small businesses lose hours every week to manual admin — order tracking, chasing leads, copy-pasting between tools. I turn that into something that runs itself. Built fast, priced for the outcome.</p>
+    <div class="cta-row">
+      <a class="btn" href="#work">See the work</a>
+      <a class="link" href="#contact">Get in touch →</a>
+    </div>
+  </header>
+
+  <div class="section-lbl" id="work">Live demos · tap to try them</div>
+
+  <div class="card">
+    <span class="pill cool">Order dashboard</span>
+    <h2>Turn a sales notebook into a live dashboard</h2>
+    <p class="pain">For shops still tracking sales by hand: every order logged once, then it adds itself up — daily totals, who still owes you, what's selling.</p>
+    <p class="does"><b>What it does:</b> log a sale, see your numbers instantly, never flip through pages to find a debtor again.</p>
+    <a class="view" href="https://naija-thread.vercel.app/" target="_blank" rel="noopener">Try the demo →</a>
+  </div>
+
+  <div class="card">
+    <span class="pill warm">Lead automation</span>
+    <h2>Catch every lead the second it lands</h2>
+    <p class="pain">For anyone losing enquiries in the DMs: a new lead gets tagged by intent, replied to in seconds, and logged automatically — no manual follow-up.</p>
+    <p class="does"><b>What it does:</b> capture once → auto-tag → instant reply → straight into your dashboard.</p>
+    <a class="view" href="lead-automation-demo.html">Try the demo →</a>
+  </div>
+
+  <div class="card">
+    <span class="pill neutral">Booking tool</span>
+    <h2>Let customers book themselves in</h2>
+    <p class="pain">For service businesses tired of back-and-forth scheduling: customers pick a slot, get a confirmation, and double-bookings are blocked automatically.</p>
+    <p class="does"><b>What it does:</b> pick service → day → time → confirmed, with a booking reference and reminders.</p>
+    <a class="view" href="booking-tool-demo.html">Try the demo →</a>
+  </div>
+
+  <div class="svc">
+    <h3>What I help with</h3>
+    <div class="srow"><span class="ic">①</span><div><div class="st">Workflow automation</div>
+      <div class="sd">The repetitive work a system should be doing for free — lead capture, follow-ups, reporting.</div></div></div>
+    <div class="srow"><span class="ic">②</span><div><div class="st">Internal tools & dashboards</div>
+      <div class="sd">Replace the one heroic spreadsheet with something that won't break when the person who built it leaves.</div></div></div>
+    <div class="srow"><span class="ic">③</span><div><div class="st">MVP builds</div>
+      <div class="sd">A working v1 in days, not months — so you can validate or pitch before spending big.</div></div></div>
+  </div>
+
+  <div class="contact" id="contact">
+    <h3>Got a process that's eating your time?</h3>
+    <p>Tell me what's slowing you down. I'll show you a fix — free, no pitch.</p>
+    <div class="row">
+      <a class="wa" href="https://wa.me/2347069509729">Message on WhatsApp</a>
+      <a class="em" href="mailto:ernestsimex@gmail.com">Email me</a>
+    </div>
+  </div>
+
+  <p class="foot">Built by Shady · Lagos, Nigeria</p>
+</div>
+</body>
+</html>

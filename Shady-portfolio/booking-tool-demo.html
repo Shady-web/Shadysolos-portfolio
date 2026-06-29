@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stitch — Booking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;430;450;480;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&display=swap" rel="stylesheet">
+<style>
+  /* Steep — daylight editorial SaaS (Refero) */
+  :root{
+    --ink:#17191c;
+    --ash:#4c4c4c;
+    --graphite:#777b86;
+    --dove:#a3a6af;
+    --fog:#f7f7f8;
+    --white:#ffffff;
+    --rust:#5d2a1a;
+    --apricot:#fbe1d1;
+    --sky:#d3e3fc;
+    --serif:'Source Serif 4',Georgia,serif;
+    --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    --shadow:rgba(4,23,43,.05) 0 0 0 1px,rgba(0,0,0,.08) 0 20px 25px -5px,rgba(0,0,0,.07) 0 8px 10px -6px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--sans);background:var(--fog);color:var(--ink);line-height:1.45;
+    -webkit-font-smoothing:antialiased;letter-spacing:-.009em;padding:0 0 64px}
+  .wrap{max-width:500px;margin:0 auto;padding:0 18px}
+  header{padding:40px 0 4px;text-align:center;position:relative}
+  .glow{position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:340px;height:200px;
+    background:radial-gradient(closest-side,var(--apricot) 0%,rgba(251,225,209,0) 72%);opacity:.55;
+    pointer-events:none;z-index:0}
+  .brand{position:relative;z-index:1;display:inline-flex;align-items:center;gap:10px;font-size:17px;
+    font-weight:480;letter-spacing:-.01em}
+  .mark{width:26px;height:26px;border-radius:9999px;background:var(--ink);display:grid;place-items:center;color:#fff;font-size:13px}
+  h1{position:relative;z-index:1;font-family:var(--serif);font-weight:400;font-size:44px;line-height:1.1;
+    letter-spacing:-.015em;margin:18px 0 0}
+  .sub{position:relative;z-index:1;color:var(--ash);font-size:16px;font-weight:400;margin-top:12px;
+    max-width:34ch;margin-left:auto;margin-right:auto;line-height:1.45}
+
+  .card{background:var(--white);border-radius:24px;box-shadow:var(--shadow);padding:24px;margin-top:22px}
+  .lbl{font-size:13px;font-weight:500;color:var(--graphite);text-transform:uppercase;letter-spacing:.05em;
+    margin-bottom:13px;display:flex;align-items:center;gap:9px}
+  .lbl .n{display:inline-grid;place-items:center;width:19px;height:19px;border-radius:9999px;background:var(--apricot);
+    color:var(--rust);font-size:11px;font-weight:500}
+  .block+.block{margin-top:24px;padding-top:24px;border-top:1px solid #ececee}
+
+  .opts{display:grid;gap:10px}
+  .opt{display:flex;justify-content:space-between;align-items:center;padding:15px 17px;border:1px solid #e6e6e9;
+    border-radius:16px;cursor:pointer;transition:.15s;background:var(--white)}
+  .opt:hover{border-color:var(--dove)}
+  .opt.sel{border-color:var(--rust);background:var(--apricot)}
+  .opt .nm{font-weight:480;font-size:15.5px}
+  .opt .dur{font-size:13px;color:var(--graphite);margin-top:2px}
+  .opt .pr{font-weight:500;font-size:15px;color:var(--ink)}
+
+  .dates{display:flex;gap:9px;overflow-x:auto;padding-bottom:5px;-webkit-overflow-scrolling:touch}
+  .date{flex:0 0 auto;width:60px;text-align:center;padding:12px 0;border:1px solid #e6e6e9;border-radius:16px;
+    cursor:pointer;transition:.15s;background:var(--white)}
+  .date:hover{border-color:var(--dove)}
+  .date.sel{border-color:var(--rust);background:var(--apricot)}
+  .date .dow{font-size:11px;font-weight:500;text-transform:uppercase;color:var(--graphite);letter-spacing:.04em}
+  .date.sel .dow{color:var(--rust)}
+  .date .dnum{font-size:20px;font-weight:480;margin-top:3px}
+
+  .slots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .slot{padding:12px 0;text-align:center;border:1px solid #e6e6e9;border-radius:16px;font-size:14.5px;
+    font-weight:450;cursor:pointer;transition:.15s;background:var(--white)}
+  .slot:hover{border-color:var(--dove)}
+  .slot.sel{border-color:var(--rust);background:var(--apricot)}
+  .slot.taken{color:var(--dove);text-decoration:line-through;cursor:not-allowed;background:var(--fog);border-color:#eee}
+  .hint{grid-column:1/-1;color:var(--graphite);font-size:14px}
+
+  input{width:100%;padding:13px 16px;border:1px solid #e1e1e4;border-radius:16px;font-size:15px;font-family:inherit;
+    background:var(--white);color:var(--ink);margin-bottom:11px;letter-spacing:-.009em;transition:.15s}
+  input::placeholder{color:var(--dove)}
+  input:focus{outline:none;border-color:var(--rust)}
+  button{width:100%;padding:14px;border:none;border-radius:9999px;background:var(--ink);color:#fff;
+    font-size:15px;font-weight:450;font-family:inherit;cursor:pointer;transition:.15s;letter-spacing:-.009em}
+  button:hover{background:#000}
+  button:disabled{background:#cdcdd2;cursor:not-allowed}
+  button:active:not(:disabled){transform:translateY(1px)}
+  .textlink{background:none;color:var(--ink);font-weight:480;margin-top:14px;padding:6px}
+  .textlink:hover{background:none;text-decoration:underline}
+
+  .done{text-align:center;padding:10px 4px}
+  .check{width:62px;height:62px;border-radius:9999px;background:var(--apricot);color:var(--rust);
+    display:grid;place-items:center;font-size:27px;margin:0 auto 18px}
+  .done h3{font-family:var(--serif);font-weight:400;font-size:30px;letter-spacing:-.01em}
+  .done p{color:var(--ash);font-size:15px;margin-top:8px}
+  .receipt{background:var(--fog);border-radius:18px;padding:18px;margin:20px 0;text-align:left}
+  .receipt .ln{display:flex;justify-content:space-between;font-size:14.5px;padding:7px 0}
+  .receipt .ln span:first-child{color:var(--graphite)}
+  .receipt .ln span:last-child{font-weight:480}
+  .ref{background:var(--apricot);color:var(--rust);font-weight:500;letter-spacing:.04em;text-align:center;
+    padding:11px;border-radius:9999px;margin-top:10px;font-size:14px}
+
+  .urow{display:flex;justify-content:space-between;align-items:center;padding:13px 0;font-size:14px}
+  .urow+.urow{border-top:1px solid #ececee}
+  .urow .ud{color:var(--graphite)}
+  .footnote{text-align:center;color:var(--graphite);font-size:12.5px;margin-top:24px;line-height:1.7}
+  .hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="glow"></div>
+    <div class="brand"><span class="mark">✂</span> Stitch</div>
+    <h1>Book a fitting</h1>
+    <p class="sub">Pick a slot in seconds — no back-and-forth in the DMs.</p>
+  </header>
+
+  <div class="card" id="booking">
+    <div class="block">
+      <div class="lbl"><span class="n">1</span> Choose a service</div>
+      <div class="opts" id="services"></div>
+    </div>
+    <div class="block">
+      <div class="lbl"><span class="n">2</span> Pick a day</div>
+      <div class="dates" id="dates"></div>
+    </div>
+    <div class="block">
+      <div class="lbl"><span class="n">3</span> Pick a time</div>
+      <div class="slots" id="slots"></div>
+    </div>
+    <div class="block">
+      <div class="lbl"><span class="n">4</span> Your details</div>
+      <input id="c-name" placeholder="Your name" value="Chidinma O.">
+      <input id="c-phone" placeholder="Phone number" value="0803 000 0000">
+      <button id="confirm" disabled>Select a slot to continue</button>
+    </div>
+  </div>
+
+  <div class="card hide" id="confirmed">
+    <div class="done">
+      <div class="check">✓</div>
+      <h3>You're booked</h3>
+      <p id="conf-line">We'll see you then.</p>
+      <div class="receipt" id="receipt"></div>
+      <button class="textlink" id="again">Book another →</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="lbl">Upcoming bookings</div>
+    <div id="ulist"></div>
+  </div>
+
+  <p class="footnote">Demo with sample data · built by Shady<br>Live version sends an SMS reminder and blocks double-bookings automatically.</p>
+</div>
+
+<script>
+  const services=[
+    {nm:'Measurement & fitting',dur:'30 min',pr:'Free'},
+    {nm:'Fabric consultation',dur:'45 min',pr:'₦5,000'},
+    {nm:'Garment pickup',dur:'15 min',pr:'Free'},
+  ];
+  const times=['10:00','11:00','12:00','1:00','2:00','3:00'];
+  const taken={0:['11:00','2:00'],1:['10:00'],2:['12:00','1:00','3:00'],3:[],4:['11:00'],5:['10:00','3:00'],6:[]};
+  const upcoming=[
+    {nm:'Blessing A.',svc:'Measurement & fitting',when:'Wed · 11:00am'},
+    {nm:'Femi K.',svc:'Garment pickup',when:'Thu · 2:00pm'},
+  ];
+  let sel={svc:null,day:null,time:null};
+  const dow=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+  const svcEl=document.getElementById('services');
+  services.forEach(s=>{const d=document.createElement('div');d.className='opt';
+    d.innerHTML=`<div><div class="nm">${s.nm}</div><div class="dur">${s.dur}</div></div><div class="pr">${s.pr}</div>`;
+    d.onclick=()=>{document.querySelectorAll('#services .opt').forEach(o=>o.classList.remove('sel'));
+      d.classList.add('sel');sel.svc=s.nm;check();};svcEl.appendChild(d);});
+
+  const dateEl=document.getElementById('dates'),today=new Date();
+  for(let i=1;i<=7;i++){const dt=new Date(today);dt.setDate(today.getDate()+i);
+    const d=document.createElement('div');d.className='date';
+    d.innerHTML=`<div class="dow">${dow[dt.getDay()]}</div><div class="dnum">${dt.getDate()}</div>`;
+    d.onclick=()=>{document.querySelectorAll('.date').forEach(o=>o.classList.remove('sel'));d.classList.add('sel');
+      sel.day=i;sel.dayLabel=`${dow[dt.getDay()]} ${dt.getDate()}`;sel.time=null;renderSlots(i);check();};
+    dateEl.appendChild(d);}
+
+  const slotEl=document.getElementById('slots');
+  function renderSlots(i){slotEl.innerHTML='';const tk=taken[i%7]||[];
+    times.forEach(t=>{const s=document.createElement('div');const isT=tk.includes(t);
+      s.className='slot'+(isT?' taken':'');s.textContent=t+(parseInt(t)<8?'pm':'am');
+      if(!isT)s.onclick=()=>{document.querySelectorAll('.slot').forEach(o=>o.classList.remove('sel'));
+        s.classList.add('sel');sel.time=s.textContent;check();};
+      slotEl.appendChild(s);});}
+  slotEl.innerHTML='<div class="hint">Pick a day first</div>';
+
+  const btn=document.getElementById('confirm');
+  function check(){if(sel.svc&&sel.day&&sel.time){btn.disabled=false;btn.textContent='Confirm booking';}
+    else{btn.disabled=true;btn.textContent='Select a slot to continue';}}
+
+  btn.onclick=()=>{const name=document.getElementById('c-name').value.trim()||'Guest';
+    const ref='STCH-'+Math.floor(1000+Math.random()*9000);
+    document.getElementById('conf-line').textContent=`${name.split(' ')[0]}, your ${sel.svc.toLowerCase()} is set.`;
+    document.getElementById('receipt').innerHTML=
+      `<div class="ln"><span>Service</span><span>${sel.svc}</span></div>
+       <div class="ln"><span>When</span><span>${sel.dayLabel} · ${sel.time}</span></div>
+       <div class="ln"><span>Name</span><span>${name}</span></div>
+       <div class="ref">Booking ref · ${ref}</div>`;
+    document.getElementById('booking').classList.add('hide');
+    document.getElementById('confirmed').classList.remove('hide');
+    upcoming.unshift({nm:name,svc:sel.svc,when:`${sel.dayLabel} · ${sel.time}`});renderUpcoming();
+    window.scrollTo({top:0,behavior:'smooth'});};
+
+  document.getElementById('again').onclick=()=>{
+    document.getElementById('confirmed').classList.add('hide');
+    document.getElementById('booking').classList.remove('hide');
+    sel={svc:null,day:null,time:null};
+    document.querySelectorAll('.opt,.date,.slot').forEach(o=>o.classList.remove('sel'));
+    slotEl.innerHTML='<div class="hint">Pick a day first</div>';check();window.scrollTo({top:0,behavior:'smooth'});};
+
+  const ul=document.getElementById('ulist');
+  function renderUpcoming(){ul.innerHTML='';upcoming.forEach(u=>{const r=document.createElement('div');r.className='urow';
+    r.innerHTML=`<div><b>${u.nm}</b> · ${u.svc}</div><div class="ud">${u.when}</div>`;ul.appendChild(r);});}
+  renderUpcoming();
+</script>
+</body>
+</html>

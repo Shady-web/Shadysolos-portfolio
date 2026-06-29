@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlowDesk — Lead Automation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Mercury — dark fintech command center (Refero) */
+  :root{
+    --deep:#171721;        /* outer canvas */
+    --slate:#1e1e2a;       /* section surfaces */
+    --graphite:#272735;    /* interactive surfaces */
+    --graphite-2:#2f2f3f;
+    --starlight:#ededf3;   /* primary text */
+    --silver:#c3c3cc;      /* secondary text */
+    --muted:#8a8a96;       /* tertiary */
+    --lead:#70707d;        /* borders/dividers */
+    --blue:#5266eb;        /* accent — primary CTA ONLY */
+    --blue-hi:#6376f0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    background:var(--deep);color:var(--starlight);line-height:1.5;font-weight:400;
+    -webkit-font-smoothing:antialiased;padding:0 0 72px;letter-spacing:.01em;
+  }
+  .wrap{max-width:600px;margin:0 auto;padding:0 20px}
+  header{padding:40px 0 8px}
+  .brand{display:flex;align-items:center;gap:11px;font-size:19px;font-weight:500;letter-spacing:.01em}
+  .mark{width:24px;height:24px;background:var(--blue);display:grid;place-items:center;color:#fff;font-size:13px}
+  .tagline{color:var(--silver);font-size:15px;font-weight:300;margin-top:14px;max-width:46ch;line-height:1.55}
+
+  .panel{background:var(--slate);border:1px solid rgba(112,112,125,.28);padding:28px 24px;margin-top:24px}
+  .eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:500;margin-bottom:20px}
+
+  label{display:block;font-size:13px;font-weight:450;color:var(--silver);margin:0 0 9px;letter-spacing:.01em}
+  input,textarea{width:100%;padding:13px 19px;border:1px solid rgba(112,112,125,.35);background:var(--graphite);
+    color:var(--starlight);font-size:15px;font-family:inherit;font-weight:400;margin-bottom:18px;
+    border-radius:32px;transition:.15s;letter-spacing:.01em}
+  textarea{border-radius:22px;resize:none;min-height:74px;line-height:1.5}
+  input::placeholder,textarea::placeholder{color:var(--muted)}
+  input:focus,textarea:focus{outline:none;border-color:var(--lead);background:var(--graphite-2)}
+  button{width:100%;padding:15px;border:none;border-radius:34px;background:var(--blue);color:#fff;
+    font-size:15px;font-weight:500;font-family:inherit;cursor:pointer;transition:.15s;letter-spacing:.015em}
+  button:hover{background:var(--blue-hi)}
+  button:active{transform:translateY(1px)}
+
+  /* pipeline */
+  .pipe{display:none}
+  .pipe.show{display:block}
+  .step{display:flex;gap:16px;align-items:flex-start;padding:18px 0;opacity:.3;transition:opacity .45s ease}
+  .step.on{opacity:1}
+  .step+.step{border-top:1px solid rgba(112,112,125,.2)}
+  .node{flex:0 0 26px;height:26px;border-radius:50%;border:1px solid var(--lead);display:grid;place-items:center;
+    font-size:12px;color:var(--muted);transition:.45s;margin-top:1px}
+  .step.on .node{border-color:var(--starlight);background:var(--starlight);color:var(--deep)}
+  .step .t{font-weight:450;font-size:15.5px;letter-spacing:.01em}
+  .step .d{font-size:13.5px;color:var(--muted);font-weight:300;margin-top:3px;line-height:1.5}
+  .chip{display:inline-block;font-size:12px;font-weight:450;padding:5px 13px;border-radius:32px;
+    border:1px solid var(--lead);color:var(--silver);margin-top:11px;letter-spacing:.02em}
+  .email{background:var(--graphite);border:1px solid rgba(112,112,125,.25);padding:15px 17px;
+    font-size:13.5px;margin-top:13px;color:var(--silver);font-weight:300;line-height:1.6}
+  .email b{color:var(--starlight);font-weight:450}
+
+  /* dashboard */
+  .panel h2{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:500;
+    display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .count{font-size:12px;color:var(--silver);font-weight:300;letter-spacing:.03em;text-transform:none}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 0}
+  .row+.row{border-top:1px solid rgba(112,112,125,.2)}
+  .who{font-weight:450;font-size:15.5px;letter-spacing:.01em}
+  .meta{font-size:13px;color:var(--muted);font-weight:300;margin-top:3px}
+  .tag-s{display:inline-block;font-size:11.5px;font-weight:400;padding:3px 11px;border-radius:32px;
+    border:1px solid rgba(112,112,125,.45);color:var(--silver);margin-top:9px;letter-spacing:.02em}
+  .pill{font-size:12px;font-weight:450;padding:6px 15px;border-radius:32px;white-space:nowrap;letter-spacing:.02em}
+  .pill.sent{background:var(--graphite-2);color:var(--starlight);border:1px solid var(--lead)}
+  .pill.new{color:var(--muted);border:1px solid rgba(112,112,125,.35)}
+
+  .footnote{text-align:center;color:var(--muted);font-size:12.5px;font-weight:300;margin-top:34px;line-height:1.8;letter-spacing:.02em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand"><span class="mark">⚡</span> FlowDesk</div>
+    <p class="tagline">Capture a lead once. It tags itself by intent, replies in seconds, and lands in your dashboard — no manual work.</p>
+  </header>
+
+  <div class="panel">
+    <div class="eyebrow">New enquiry</div>
+    <label>Name</label>
+    <input id="f-name" placeholder="e.g. Amaka Obi" value="Amaka Obi">
+    <label>Where they found you</label>
+    <input id="f-biz" placeholder="e.g. Instagram" value="Instagram DM">
+    <label>Email</label>
+    <input id="f-email" type="email" placeholder="name@email.com" value="amaka@gmail.com">
+    <label>What do they need?</label>
+    <textarea id="f-need" placeholder="A few words about the request…">Need 6 yards of Ankara for a wedding, asking about bulk pricing</textarea>
+    <button id="submit">Capture lead</button>
+  </div>
+
+  <div class="panel pipe" id="pipe">
+    <div class="eyebrow">What happens automatically</div>
+    <div class="step" id="s1">
+      <div class="node">1</div>
+      <div><div class="t">Lead captured</div><div class="d" id="s1d">Saved the moment they hit send.</div></div>
+    </div>
+    <div class="step" id="s2">
+      <div class="node">2</div>
+      <div><div class="t">Auto-tagged by intent</div><div class="d">Sorted so the leads worth money rise to the top.</div>
+        <span class="chip" id="s2tag">tag</span></div>
+    </div>
+    <div class="step" id="s3">
+      <div class="node">3</div>
+      <div><div class="t">Instant reply sent</div><div class="d">They hear back in seconds, even at 2am.</div>
+        <div class="email" id="s3email"></div></div>
+    </div>
+    <div class="step" id="s4">
+      <div class="node">4</div>
+      <div><div class="t">Logged to dashboard</div><div class="d">No spreadsheet, no copy-paste. It's just there.</div></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2><span>Leads dashboard</span><span class="count" id="count">3 leads</span></h2>
+    <div id="board"></div>
+  </div>
+
+  <p class="footnote">Demo with sample data · built by Shady<br>Live version connects to WhatsApp, Instagram or a website form.</p>
+</div>
+
+<script>
+  const board=document.getElementById('board');
+  const leads=[
+    {name:'Tunde Bello',src:'WhatsApp',tag:'Bulk order',status:'sent',when:'Today, 9:14am'},
+    {name:'Grace Eze',src:'Website form',tag:'Pricing question',status:'sent',when:'Today, 8:02am'},
+    {name:'Kemi A.',src:'Instagram',tag:'New customer',status:'new',when:'Yesterday'},
+  ];
+  function tagFor(t){t=t.toLowerCase();
+    if(t.includes('bulk')||t.includes('wholesale')||/\b\d+\s*(yard|yards|pieces)/.test(t))return 'Bulk order';
+    if(t.includes('price')||t.includes('pricing')||t.includes('cost')||t.includes('how much'))return 'Pricing question';
+    if(t.includes('wedding')||t.includes('event')||t.includes('party'))return 'Event order';
+    return 'New customer';}
+  function render(){board.innerHTML='';leads.forEach(l=>{
+    const r=document.createElement('div');r.className='row';
+    r.innerHTML=`<div><div class="who">${l.name}</div><div class="meta">${l.src} · ${l.when}</div>
+      <span class="tag-s">${l.tag}</span></div>
+      <div><span class="pill ${l.status}">${l.status==='sent'?'Replied':'New'}</span></div>`;
+    board.appendChild(r);});
+    document.getElementById('count').textContent=leads.length+' leads';}
+  render();
+  const on=(id,v)=>document.getElementById(id).classList.toggle('on',v);
+  document.getElementById('submit').addEventListener('click',()=>{
+    const name=document.getElementById('f-name').value.trim()||'New lead';
+    const src=document.getElementById('f-biz').value.trim()||'Direct';
+    const need=document.getElementById('f-need').value.trim();
+    const tag=tagFor(need),first=name.split(' ')[0];
+    const pipe=document.getElementById('pipe');pipe.classList.add('show');
+    ['s1','s2','s3','s4'].forEach(s=>on(s,false));
+    pipe.scrollIntoView({behavior:'smooth',block:'start'});
+    document.getElementById('s1d').textContent=name+' saved the moment they hit send.';
+    document.getElementById('s2tag').textContent=tag;
+    document.getElementById('s3email').innerHTML=
+      `<b>To:</b> ${name}<br><b>Subject:</b> Thanks for reaching out<br><br>`+
+      `Hi ${first}, we've got your message and someone will get back to you shortly with details. Feel free to share any photos of what you have in mind.`;
+    setTimeout(()=>on('s1',true),250);
+    setTimeout(()=>on('s2',true),1050);
+    setTimeout(()=>on('s3',true),1900);
+    setTimeout(()=>{on('s4',true);leads.unshift({name,src,tag,status:'sent',when:'Just now'});render();},2750);
+  });
+</script>
+</body>
+</html>
